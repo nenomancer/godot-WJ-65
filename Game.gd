@@ -1,5 +1,5 @@
 extends Node2D
-const AudioData = preload("res://audio/AudioData.gd")
+const AudioData = preload("res://Assets/AudioData.gd")
 # Called when the node enters the scene tree for the first time.
 const BUTTON = preload("res://ColorButton.tscn")
 func _ready():

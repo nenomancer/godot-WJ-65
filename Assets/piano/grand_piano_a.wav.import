@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://u3m7swuamagw"
-path="res://.godot/imported/grand_piano_a.wav-93ca1bd49b84ac29da296ada4258655a.sample"
+path="res://.godot/imported/grand_piano_a.wav-8ff19d271001b031e6a735fc7921253b.sample"
 
 [deps]
 
-source_file="res://audio/piano/grand_piano_a.wav"
-dest_files=["res://.godot/imported/grand_piano_a.wav-93ca1bd49b84ac29da296ada4258655a.sample"]
+source_file="res://Assets/piano/grand_piano_a.wav"
+dest_files=["res://.godot/imported/grand_piano_a.wav-8ff19d271001b031e6a735fc7921253b.sample"]
 
 [params]
 
