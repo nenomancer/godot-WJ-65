@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cgeb8rcs7pett"]
+
+[ext_resource type="Script" path="res://Button.gd" id="1_bt24m"]
+
+[node name="Button" type="Polygon2D"]
+color = Color(1, 0, 0.435294, 1)
+polygon = PackedVector2Array(110, 85, 109, 145, 231, 151, 224, 77)
+script = ExtResource("1_bt24m")
