@@ -36,16 +36,13 @@ func _process(delta):
 	pass
 
 func generate_color_pairs():
-	var index = 0
+	var index = 3
 	for i in range(3):
-		#print(i, colors[i], sounds.keys()[i])
 		pairs[sounds.keys()[index]] = {
 			sound = sounds.values()[index],
-			#color = colors[index],
-			color = mix_color([colors[index], colors[index + 1]]),
+			color = colors[index],
 		}
-		index += 2
-	#print(pairs)
+		index += 2 # Every OTHER note (in this case: C, E, G)
 
 func mix_color(colors: Array[Color]) -> Color:
 	# Mix two or more Colors
