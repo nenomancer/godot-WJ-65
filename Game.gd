@@ -17,7 +17,7 @@ var correct_color
 
 func _ready():
 	
-	generate_color_pairs(4, 4)
+	generate_color_pairs(12, 1)
 	print(sound_color_pairs.keys())
 	var correct_index = randi_range(0, sound_color_pairs.size() - 1)
 	var i = 0
@@ -36,16 +36,32 @@ func _ready():
 		
 		new_button.configure_button(sound_color_pairs[sound].sound, sound_color_pairs[sound].color, sound, sound_color_pairs.values()[i].color)
 	
-		$Colors.add_child(new_button)
+		#$Colors.add_cshild(new_button)
 		i += 1
 		
 	buttons = $Colors.get_children()
 	print(buttons)
+	
+	for button in buttons:
+		var target_sound = button.get_node("Sound").stream
+		button.color_clicked.connect(Callable(handle_button).bind(button))
+		for sound in sound_color_pairs:
+			var audition_sound = sound_color_pairs[sound].sound
+			if(audition_sound == target_sound):
+				var new_color = sound_color_pairs[sound].color
+				var new_text = sound
+				button.get_node("Color").color = new_color
+				button.get_node("NoteName").text = new_text
+				button.color_value = new_color
+				button.color_hover = new_color.lightened(0.1)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
+func handle_button(button):
+	print('this is button ' , button)
+	
 func generate_color_pairs(note_range: int = 3, semitone_skip: int = 4):
 	var index = 0
 	for i in note_range:

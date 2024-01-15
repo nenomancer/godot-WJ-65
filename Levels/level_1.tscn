@@ -1,7 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://cettirweceywv"]
+[gd_scene load_steps=10 format=3 uid="uid://cettirweceywv"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_3k8xh"]
 [ext_resource type="PackedScene" uid="uid://m5oka3dxiq0j" path="res://button.tscn" id="2_67ycv"]
+[ext_resource type="AudioStream" uid="uid://ckjfgtaer5ak2" path="res://Assets/piano/grand_piano_c.wav" id="3_pwwop"]
+[ext_resource type="AudioStream" uid="uid://doo8rgpt37yif" path="res://Assets/piano/grand_piano_e.wav" id="4_uee3v"]
+[ext_resource type="AudioStream" uid="uid://ugjdf1urcdo2" path="res://Assets/piano/grand_piano_g.wav" id="5_onjsg"]
 
 [sub_resource type="Gradient" id="Gradient_xvx8v"]
 colors = PackedColorArray(0.650538, 0.364035, 0.536348, 1, 0.965937, 0.594153, 0.5288, 1)
@@ -27,6 +30,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Screen" type="CenterContainer" parent="."]
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
@@ -62,11 +66,15 @@ alignment = 1
 
 [node name="Button" parent="Screen/MainContainer/Colors" instance=ExtResource("2_67ycv")]
 layout_mode = 2
+current_sound = ExtResource("3_pwwop")
+current_color = Color(0.698039, 0, 0.584314, 1)
 
 [node name="Button2" parent="Screen/MainContainer/Colors" instance=ExtResource("2_67ycv")]
 layout_mode = 2
+current_sound = ExtResource("4_uee3v")
 
 [node name="Button3" parent="Screen/MainContainer/Colors" instance=ExtResource("2_67ycv")]
 layout_mode = 2
+current_sound = ExtResource("5_onjsg")
 
 [node name="MainSound" type="AudioStreamPlayer" parent="Screen/MainContainer"]
