@@ -33,7 +33,9 @@ func _on_button_button_up():
 	color_clicked.emit()
 
 func _on_button_mouse_entered():
-	button_color = color_hover
+	var tween = get_tree().create_tween()
+	tween.tween_property($Color, "color", button_color.lightened(0.5), 0.25)
 
 func _on_button_mouse_exited():
-	button_color = color_value
+	var tween = get_tree().create_tween()
+	tween.tween_property($Color, "color", button_color, 0.25)

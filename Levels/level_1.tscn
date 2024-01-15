@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cettirweceywv"]
+[gd_scene load_steps=11 format=3 uid="uid://cettirweceywv"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_3k8xh"]
 [ext_resource type="PackedScene" uid="uid://m5oka3dxiq0j" path="res://button.tscn" id="2_67ycv"]
@@ -6,16 +6,25 @@
 [ext_resource type="AudioStream" uid="uid://dslrwpujotpfs" path="res://Assets/piano/grand_piano_f.wav" id="4_ghkiq"]
 
 [sub_resource type="Gradient" id="Gradient_xvx8v"]
-colors = PackedColorArray(0.650538, 0.364035, 0.536348, 1, 0.965937, 0.594153, 0.5288, 1)
+colors = PackedColorArray(0.650159, 0.300289, 0.632355, 1, 0.80538, 0.705082, 0.296175, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_lkut6"]
 frequency = 0.0001
 offset = Vector3(0, -48.39, 0)
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_j8wg2"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wcfs6"]
 width = 800
 height = 800
 color_ramp = SubResource("Gradient_xvx8v")
+noise = SubResource("FastNoiseLite_lkut6")
+
+[sub_resource type="Gradient" id="Gradient_7dj61"]
+colors = PackedColorArray(0, 0.554358, 0.210696, 1, 0.663105, 0.76588, 0.102753, 1)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_j8wg2"]
+width = 800
+height = 800
+color_ramp = SubResource("Gradient_7dj61")
 noise = SubResource("FastNoiseLite_lkut6")
 
 [sub_resource type="LabelSettings" id="LabelSettings_pybci"]
@@ -35,7 +44,17 @@ offset_bottom = 40.0
 
 [node name="Background" type="TextureRect" parent="Screen"]
 layout_mode = 2
+texture = SubResource("NoiseTexture2D_wcfs6")
+
+[node name="BackgroundCorrect" type="TextureRect" parent="Screen"]
+visible = false
+layout_mode = 2
 texture = SubResource("NoiseTexture2D_j8wg2")
+
+[node name="Points" type="Label" parent="Screen"]
+custom_minimum_size = Vector2(750, 750)
+layout_mode = 2
+text = "Points: "
 
 [node name="MainContainer" type="VBoxContainer" parent="Screen"]
 layout_mode = 2
