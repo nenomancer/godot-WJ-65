@@ -1,7 +1,7 @@
 extends MarginContainer
 signal color_clicked(button)
 
-@onready var button_color = $Color
+@onready var button_color = $Color.color
 @onready var button_sound = $Sound
 @onready var button_label = $NoteName
 var is_hovered: bool = false
@@ -26,13 +26,14 @@ func configure_button(audio: AudioStreamWAV, fill_color: Color, text: String, te
 	$Color.color = fill_color
 	$NoteName.text = text
 	$NoteName.label_settings.font_color = text_color
+	color_hover = fill_color.lightened(0.5)
 
 func _on_button_button_up():
 	button_sound.playing = true
 	color_clicked.emit()
 
 func _on_button_mouse_entered():
-	button_color.color = color_hover
+	button_color = color_hover
 
 func _on_button_mouse_exited():
-	button_color.color = color_value
+	button_color = color_value
