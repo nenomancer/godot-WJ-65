@@ -11,24 +11,27 @@ const sounds: Dictionary = audio_data.DATA
 
 var buttons: Array
 var index = 0
-var sound_color_pairs = {}
+var sound_color_pairs = {
+	# note: String,
+	# sound: AudioStreamWAV,
+	# color: Color
+}
 
-var correct_color
+var correct_color: Color
+var correct_sound: AudioStreamWAV
 
 func _ready():
 	
 	generate_color_pairs(12, 1)
 	print(sound_color_pairs.keys())
-	var correct_index = randi_range(0, sound_color_pairs.size() - 1)
+	generate_buttons(6)
 	var i = 0
 	for sound in sound_color_pairs:
 		var new_button = BUTTON.instantiate()
 		var text_color: Color = Color.BLACK
 		
 		var luminance = sound_color_pairs[sound].color.get_luminance()
-		print(sound_color_pairs[sound], ' ', sound_color_pairs[sound].color.get_luminance())
 		if luminance <= 0.5:
-			print("this is a dark color")
 			text_color = Color.WHITE
 		#elif luminance >= 0.5:
 			#print("this is a light color")
@@ -40,7 +43,8 @@ func _ready():
 		i += 1
 		
 	buttons = $Colors.get_children()
-	print(buttons)
+	var correct_index = randi_range(0, buttons.size() - 1)
+	print('button size: ', buttons.size(), ' correct index: ', correct_index)
 	
 	for button in buttons:
 		var target_sound = button.get_node("Sound").stream
@@ -54,13 +58,47 @@ func _ready():
 				button.get_node("NoteName").text = new_text
 				button.color_value = new_color
 				button.color_hover = new_color.lightened(0.1)
+		if correct_index == button.get_index():
+			# Set the correct answer
+			correct_color = button.get_node("Color").color
+			correct_sound = button.get_node("Sound").stream
+			$CorrectNote.text = "Correct note: " + button.get_node("NoteName").text
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+func generate_buttons(number_of_buttons: int):
+	var i = 0
+	var index_array: Array
+	while i < number_of_buttons:
+		# 0
+		# sound_color_pairs[0]
+		var indexx = randi_range(0, sound_color_pairs.values().size() - 1)
+		index_array.append(indexx)
+		print("Sound color pairs :", sound_color_pairs.values()[indexx], ', index: ', indexx)
+		print("Sound and color pairs: ", sound_color_pairs.values().size())
+		var new_button = BUTTON.instantiate()
+		var text_color: Color = Color.BLACK
+		var new_color: Color = sound_color_pairs.values()[indexx].color
+		var new_sound: AudioStreamWAV = sound_color_pairs.values()[indexx].sound
+		var new_label: String = sound_color_pairs.values()[indexx].note
+		new_button.color_value = new_color
+		new_button.color_hover = new_color.lightened(0.5)
+		
+		#var luminance = sound_color_pairs[indexx].color.get_luminance()
+		#if luminance <= 0.5:
+			#text_color = Color.WHITE
+		
+		new_button.configure_button(new_sound, new_color, new_label, Color.OLD_LACE)
+		sound_color_pairs.erase(sound_color_pairs.keys()[indexx])
+		$Colors.add_child(new_button)
+		i += 1
 
 func handle_button(button):
-	print('this is button ' , button)
+	if correct_sound == button.get_node("Sound").stream:
+		print("You guessed the CORRECT color")
+	else:
+		print("You guessed the WRONG color")
 	
 func generate_color_pairs(note_range: int = 3, semitone_skip: int = 4):
 	var index = 0
