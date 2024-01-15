@@ -9,6 +9,8 @@ const BLUE = Color(0.1, 0.1, 1, 1.0)
 const PURPLE = Color(0.75, 0, 1, 1.0)
 const PINK = Color(1, 0, 0.9, 1.0)
 const SALMON = Color(1, 0, 0.45, 1.0)
+const AQUA = Color.AQUA
+const ANTIQUE_WHITE = Color.ANTIQUE_WHITE
 
 const DATA = [
 	RED,
@@ -21,5 +23,6 @@ const DATA = [
 	BLUE,
 	PURPLE,
 	PINK,
-	SALMON
+	SALMON,
+	ANTIQUE_WHITE
 ]

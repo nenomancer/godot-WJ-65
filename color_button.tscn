@@ -1,0 +1,87 @@
+[gd_scene load_steps=4 format=3 uid="uid://de8l0jmgsk58d"]
+
+[ext_resource type="FontFile" uid="uid://dpy53bvyqmsf4" path="res://Assets/fonts/Carlito-Regular.ttf" id="2_kry1k"]
+
+[sub_resource type="GDScript" id="GDScript_avsc0"]
+script/source = "extends MarginContainer
+
+@onready var button_color = $Color
+@onready var button_sound = $Sound
+@onready var button_label = $NoteName
+
+const audio_data = preload(\"res://Assets/audio_data.gd\")
+const color_data = preload(\"res://Assets/color_data.gd\")
+
+#const colors = [green, jade, turquoise, baby_blue, blue, purple, pink, salmon]
+var colors: Array = color_data.DATA
+const sounds: Dictionary = audio_data.DATA
+
+var index = 0
+var is_hovered: bool = false
+
+var color_value: Color
+var color_hover: Color 
+
+@export var current_sound: AudioStreamWAV
+@export var current_color: Color
+
+func _ready():
+	if current_color != Color.BLACK:
+		button_color.color = current_color
+	if current_sound != null:
+		button_sound.stream = current_sound
+		
+	color_value = button_color.color
+	color_hover = color_value.lightened(0.25)
+
+func configure_button(audio: AudioStreamWAV, fill_color: Color, text: String, text_color: Color):
+	$Sound.stream = audio
+	$Color.color = fill_color
+	$NoteName.text = text
+	$NoteName.label_settings.font_color = text_color
+
+func _on_button_button_up():
+	# Change color on button click
+	button_sound.playing = true
+	#button_color.modulate = Color(1.2, .8,.8)
+
+func _on_button_mouse_entered():
+	button_color.color = color_hover
+
+func _on_button_mouse_exited():
+	button_color.color = color_value
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_uh6fe"]
+font = ExtResource("2_kry1k")
+font_size = 48
+font_color = Color(0, 0, 0, 1)
+outline_color = Color(0, 0, 0, 1)
+
+[node name="ColorButton" type="MarginContainer"]
+custom_minimum_size = Vector2(180, 180)
+offset_right = 250.0
+offset_bottom = 250.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource("GDScript_avsc0")
+
+[node name="Color" type="ColorRect" parent="."]
+layout_mode = 2
+
+[node name="Button" type="TextureButton" parent="."]
+layout_mode = 2
+ignore_texture_size = true
+
+[node name="Sound" type="AudioStreamPlayer" parent="."]
+
+[node name="NoteName" type="Label" parent="."]
+layout_mode = 2
+text = "C#"
+label_settings = SubResource("LabelSettings_uh6fe")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="button_up" from="Button" to="." method="_on_button_button_up"]
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]

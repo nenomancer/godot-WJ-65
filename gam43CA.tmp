@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://b1d0m3oxytxhn"]
+[gd_scene load_steps=7 format=3 uid="uid://b1d0m3oxytxhn"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_ar8hp"]
+[ext_resource type="PackedScene" uid="uid://cgeb8rcs7pett" path="res://color_button.tscn" id="2_euoa8"]
 
 [sub_resource type="Gradient" id="Gradient_xvx8v"]
 colors = PackedColorArray(0.650538, 0.364035, 0.536348, 1, 0.965937, 0.594153, 0.5288, 1)
@@ -60,4 +61,6 @@ layout_mode = 2
 size_flags_vertical = 3
 alignment = 1
 
-[node name="MainSound" type="AudioStreamPlayer" parent="Screen/MainContainer"]
+[node name="ColorButton" parent="Screen/MainContainer/Colors" instance=ExtResource("2_euoa8")]
+layout_mode = 2
+current_color = Color(1, 0.815686, 0.784314, 1)
