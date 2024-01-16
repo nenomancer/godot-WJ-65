@@ -1,7 +1,65 @@
-[gd_scene load_steps=4 format=3 uid="uid://m5oka3dxiq0j"]
+[gd_scene load_steps=16 format=3 uid="uid://m5oka3dxiq0j"]
 
 [ext_resource type="Script" path="res://button.gd" id="1_2cch7"]
 [ext_resource type="FontFile" uid="uid://dpy53bvyqmsf4" path="res://Assets/fonts/Carlito-Regular.ttf" id="2_3toa1"]
+[ext_resource type="Shader" path="res://button_texture.gdshader" id="2_8jwbt"]
+[ext_resource type="Texture2D" uid="uid://da4hbvcigs587" path="res://icon.svg" id="3_dfq0n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adim2"]
+bg_color = Color(0.6, 1, 0.6, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="Theme" id="Theme_b2t0v"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dled5"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="Gradient" id="Gradient_pe02j"]
+interpolation_mode = 2
+colors = PackedColorArray(0.485703, 0.485704, 0.485703, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_248ea"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3xhok"]
+width = 120
+height = 120
+seamless = true
+color_ramp = SubResource("Gradient_pe02j")
+noise = SubResource("FastNoiseLite_248ea")
+
+[sub_resource type="Gradient" id="Gradient_vsiui"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5vu4a"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_g2w1c"]
+width = 120
+height = 120
+seamless = true
+color_ramp = SubResource("Gradient_vsiui")
+noise = SubResource("FastNoiseLite_5vu4a")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cpchw"]
+resource_local_to_scene = true
+shader = ExtResource("2_8jwbt")
+shader_parameter/color = Vector3(0.2, 1, 0.2)
+shader_parameter/distortion_strength = 0.2
+shader_parameter/scroll_1 = Vector2(0.05, 0.05)
+shader_parameter/scroll_2 = Vector2(-0.05, -0.05)
+shader_parameter/noise_1 = SubResource("NoiseTexture2D_3xhok")
+shader_parameter/noise_2 = SubResource("NoiseTexture2D_g2w1c")
 
 [sub_resource type="LabelSettings" id="LabelSettings_ohwud"]
 font = ExtResource("2_3toa1")
@@ -19,24 +77,56 @@ offset_bottom = -680.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2cch7")
+metadata/_edit_group_ = true
 
-[node name="Color" type="ColorRect" parent="."]
+[node name="Container" type="Panel" parent="."]
+clip_children = 2
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_adim2")
 
-[node name="Button" type="TextureButton" parent="."]
+[node name="Color" type="ColorRect" parent="Container"]
 layout_mode = 2
+offset_right = 120.0
+offset_bottom = 120.0
+theme = SubResource("Theme_b2t0v")
+
+[node name="Border" type="Panel" parent="Container"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.85, 0.85)
+pivot_offset = Vector2(60, 60)
+theme_override_styles/panel = SubResource("StyleBoxFlat_dled5")
+
+[node name="BGNoise" type="Sprite2D" parent="Container"]
+visible = false
+material = SubResource("ShaderMaterial_cpchw")
+scale = Vector2(0.9375, 0.9375)
+texture = ExtResource("3_dfq0n")
+centered = false
+
+[node name="Button" type="TextureButton" parent="Container"]
+layout_mode = 2
+offset_right = 120.0
+offset_bottom = 120.0
 ignore_texture_size = true
 
-[node name="Sound" type="AudioStreamPlayer" parent="."]
+[node name="Sound" type="AudioStreamPlayer" parent="Container"]
 max_polyphony = 3
 
-[node name="NoteName" type="Label" parent="."]
+[node name="NoteName" type="Label" parent="Container"]
 layout_mode = 2
+offset_top = 36.0
+offset_right = 120.0
+offset_bottom = 84.0
 text = "C#"
 label_settings = SubResource("LabelSettings_ohwud")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="button_up" from="Button" to="." method="_on_button_button_up"]
-[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]
+[connection signal="button_up" from="Container/Button" to="." method="_on_button_button_up"]
+[connection signal="mouse_entered" from="Container/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Container/Button" to="." method="_on_button_mouse_exited"]

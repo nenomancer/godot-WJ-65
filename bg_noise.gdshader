@@ -1,4 +1,4 @@
-//shader_type canvas_item;
+shader_type canvas_item;
 //uniform sampler2D texture2;
 //void vertex() {
 	//// Called for every vertex the material is visible on.
