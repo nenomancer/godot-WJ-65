@@ -1,6 +1,6 @@
 extends Container
 # Called when the node enters the scene tree for the first time.
-const BUTTON = preload("res://button.tscn")
+const BUTTON = preload("res://Button/button.tscn")
 const audio_data = preload("res://Assets/audio_data.gd")
 const color_data = preload("res://Assets/color_data.gd")
 
@@ -10,10 +10,14 @@ const result_text = {
 	incorrect = "That's the wrong answer",
 }
 
+signal has_answered(is_correct: bool)
+
 @onready var background_correct = $"../BackgroundCorrect"
 @onready var points_label = $"../Points"
+@export var stages: int = 5
+@export var options_per_stage = 3
+
 var points: int = 0
-var stages: int = 3
 var stage_index: int = 0
 
 #const colors = [green, jade, turquoise, baby_blue, blue, purple, pink, salmon]
@@ -34,7 +38,6 @@ var sound_color_pairs = {
 var correct_index: int
 var correct_color: Color
 var correct_sound: AudioStreamWAV
-var number_of_options = 3
 
 func _ready():
 	generate_color_pairs(12, 1)
@@ -45,8 +48,8 @@ func _ready():
 	if loaded_buttons.size() > 0:
 		load_buttons()	
 		
-	#next_question(number_of_options)
-	generate_buttons(12, true)
+	next_question(options_per_stage)
+	#generate_buttons(12, true)
 	enable_buttons(true)
 
 func generate_color_pairs(note_range: int = 3, semitone_skip: int = 4):
@@ -76,7 +79,7 @@ func next_question(number_of_questions: int):
 	if stage_index < stages:
 		for child in $Colors.get_children():
 			$Colors.remove_child(child)
-		generate_buttons(number_of_options)
+		generate_buttons(options_per_stage)
 		stage_index += 1
 		init_stage()
 	else:
@@ -135,9 +138,9 @@ func generate_buttons(number_of_buttons: int, first_time: bool = false):
 		
 		var new_button = BUTTON.instantiate()
 		
-		var new_color: Color = sound_color_pairs.values()[i].color
-		var new_sound: AudioStreamWAV = sound_color_pairs.values()[i].sound
-		var new_label: String = sound_color_pairs.values()[i].note
+		var new_color: Color = sound_color_pairs.values()[indexx].color
+		var new_sound: AudioStreamWAV = sound_color_pairs.values()[indexx].sound
+		var new_label: String = sound_color_pairs.values()[indexx].note
 		
 		new_button.color_value = new_color
 		new_button.color_hover = new_color.lightened(0.5)
@@ -149,14 +152,11 @@ func generate_buttons(number_of_buttons: int, first_time: bool = false):
 		if correct_index == i: 
 			set_correct_answer(new_button)
 		
-		#var luminance = sound_color_pairs[indexx].color.get_luminance()
-		#if luminance <= 0.5:
-			#text_color = Color.WHITE
-		
-		#sound_color_pairs.erase(sound_color_pairs.keys()[indexx])
 		$Colors.add_child(new_button)
 		i += 1
 
+func change_bg_color(color: Color):
+	$'../'Background.
 func check_answer(button):
 	print('Button: ', button, ', correct sound: ', correct_sound, ', button sound: ', button.get_node("Container/Sound").stream)
 	if correct_sound == button.get_node("Container/Sound").stream:
@@ -166,7 +166,7 @@ func check_answer(button):
 		enable_buttons(false)
 		await get_tree().create_timer(2).timeout
 		background_correct.visible = false
-		next_question(number_of_options)
+		next_question(options_per_stage)
 	else:
 		print("You guessed the WRONG color")
 		background_correct.visible = false
@@ -174,7 +174,7 @@ func check_answer(button):
 		enable_buttons(false)
 		await get_tree().create_timer(2).timeout
 		background_correct.visible = false
-		next_question(number_of_options)
+		next_question(options_per_stage)
 	
 
 func mix_color(colors: Array[Color]) -> Color:

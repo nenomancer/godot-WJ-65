@@ -1,30 +1,43 @@
-[gd_scene load_steps=8 format=3 uid="uid://cettirweceywv"]
+[gd_scene load_steps=9 format=3 uid="uid://cettirweceywv"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_3k8xh"]
 
-[sub_resource type="Gradient" id="Gradient_xvx8v"]
+[sub_resource type="Gradient" id="Gradient_66aks"]
 colors = PackedColorArray(0.650159, 0.300289, 0.632355, 1, 0.80538, 0.705082, 0.296175, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_lkut6"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_weu7k"]
 frequency = 0.0001
 offset = Vector3(0, -48.39, 0)
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wcfs6"]
 width = 800
 height = 800
-color_ramp = SubResource("Gradient_xvx8v")
-noise = SubResource("FastNoiseLite_lkut6")
+color_ramp = SubResource("Gradient_66aks")
+noise = SubResource("FastNoiseLite_weu7k")
 
-[sub_resource type="Gradient" id="Gradient_7dj61"]
+[sub_resource type="Gradient" id="Gradient_x1yvr"]
 colors = PackedColorArray(0, 0.554358, 0.210696, 1, 0.663105, 0.76588, 0.102753, 1)
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_j8wg2"]
 width = 800
 height = 800
-color_ramp = SubResource("Gradient_7dj61")
-noise = SubResource("FastNoiseLite_lkut6")
+color_ramp = SubResource("Gradient_x1yvr")
+noise = SubResource("FastNoiseLite_weu7k")
 
 [sub_resource type="LabelSettings" id="LabelSettings_pybci"]
+
+[sub_resource type="Environment" id="Environment_j31n7"]
+background_mode = 4
+background_energy_multiplier = 0.0
+ambient_light_color = Color(0, 0.788235, 0.905882, 1)
+ambient_light_energy = 5.25
+glow_enabled = true
+glow_levels/1 = 21.3
+glow_levels/2 = 15.4
+glow_levels/3 = 12.35
+glow_normalized = true
+glow_blend_mode = 0
+adjustment_enabled = true
 
 [node name="Level1" type="Control"]
 layout_mode = 3
@@ -87,3 +100,6 @@ text = "Correct Note: C#"
 label_settings = SubResource("LabelSettings_pybci")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_j31n7")

@@ -1,9 +1,8 @@
 [gd_scene load_steps=16 format=3 uid="uid://m5oka3dxiq0j"]
 
-[ext_resource type="Script" path="res://button.gd" id="1_2cch7"]
-[ext_resource type="FontFile" uid="uid://dpy53bvyqmsf4" path="res://Assets/fonts/Carlito-Regular.ttf" id="2_3toa1"]
-[ext_resource type="Shader" path="res://button_texture.gdshader" id="2_8jwbt"]
-[ext_resource type="Texture2D" uid="uid://da4hbvcigs587" path="res://icon.svg" id="3_dfq0n"]
+[ext_resource type="Script" path="res://Button/button.gd" id="1_37jjs"]
+[ext_resource type="Shader" path="res://Button/button_texture.gdshader" id="2_pnf8q"]
+[ext_resource type="FontFile" uid="uid://dpy53bvyqmsf4" path="res://Assets/fonts/Carlito-Regular.ttf" id="3_oqunh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adim2"]
 bg_color = Color(0.6, 1, 0.6, 1)
@@ -53,7 +52,7 @@ noise = SubResource("FastNoiseLite_5vu4a")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cpchw"]
 resource_local_to_scene = true
-shader = ExtResource("2_8jwbt")
+shader = ExtResource("2_pnf8q")
 shader_parameter/color = Vector3(0.2, 1, 0.2)
 shader_parameter/distortion_strength = 0.2
 shader_parameter/scroll_1 = Vector2(0.05, 0.05)
@@ -61,8 +60,10 @@ shader_parameter/scroll_2 = Vector2(-0.05, -0.05)
 shader_parameter/noise_1 = SubResource("NoiseTexture2D_3xhok")
 shader_parameter/noise_2 = SubResource("NoiseTexture2D_g2w1c")
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_lynll"]
+
 [sub_resource type="LabelSettings" id="LabelSettings_ohwud"]
-font = ExtResource("2_3toa1")
+font = ExtResource("3_oqunh")
 font_size = 48
 font_color = Color(0, 0, 0, 1)
 outline_color = Color(0, 0, 0, 1)
@@ -76,7 +77,7 @@ offset_right = -680.0
 offset_bottom = -680.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_2cch7")
+script = ExtResource("1_37jjs")
 metadata/_edit_group_ = true
 
 [node name="Container" type="Panel" parent="."]
@@ -104,8 +105,8 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_dled5")
 [node name="BGNoise" type="Sprite2D" parent="Container"]
 visible = false
 material = SubResource("ShaderMaterial_cpchw")
-scale = Vector2(0.9375, 0.9375)
-texture = ExtResource("3_dfq0n")
+scale = Vector2(120, 120)
+texture = SubResource("PlaceholderTexture2D_lynll")
 centered = false
 
 [node name="Button" type="TextureButton" parent="Container"]

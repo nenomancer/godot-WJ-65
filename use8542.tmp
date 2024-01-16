@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dxabphe583t1w"]
+[gd_scene load_steps=9 format=3 uid="uid://dxabphe583t1w"]
 
 [ext_resource type="Script" path="res://user_interface.gd" id="1_8ynky"]
 [ext_resource type="Shader" path="res://bg_noise.gdshader" id="2_6eibw"]
@@ -9,23 +9,15 @@
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_r7vqv"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_l8ljl"]
-seamless = true
 color_ramp = SubResource("Gradient_b0c42")
 noise = SubResource("FastNoiseLite_r7vqv")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bukc2"]
 shader = ExtResource("2_6eibw")
-shader_parameter/noise_offset = Vector2(0.5, 0.5)
-shader_parameter/scroll_speed = 0.05
+shader_parameter/noise_offset = null
 shader_parameter/texture_1 = SubResource("NoiseTexture2D_l8ljl")
 
 [sub_resource type="LabelSettings" id="LabelSettings_soq4g"]
-
-[sub_resource type="Environment" id="Environment_6q6dn"]
-glow_enabled = true
-glow_intensity = 2.9
-glow_bloom = 1.0
-glow_hdr_threshold = 0.51
 
 [node name="UserInterface" type="Control"]
 layout_mode = 3
@@ -80,6 +72,3 @@ text = "Next"
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_6q6dn")
