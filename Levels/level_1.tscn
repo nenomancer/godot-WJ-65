@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://cettirweceywv"]
 
-[ext_resource type="Script" path="res://game.gd" id="1_3k8xh"]
+[ext_resource type="Script" path="res://button_container.gd" id="1_3k8xh"]
 [ext_resource type="Script" path="res://main_sound.gd" id="2_8qosd"]
 
 [sub_resource type="Gradient" id="Gradient_66aks"]

@@ -10,7 +10,7 @@ func _ready():
 	#
 
 
-func _on_main_container_update_points(point_amount):
+func _on_button_container_update_points(point_amount):
 	current_points += point_amount
 	print("UPDATIN")
 	text = "Points: " + str(current_points)

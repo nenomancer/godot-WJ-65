@@ -173,17 +173,15 @@ func generate_buttons(number_of_buttons: int, first_time: bool = false):
 		
 		$Colors.add_child(new_button)
 		i += 1
+	existing_buttons.clear()
 
 func check_answer(button):
 	print("CHECKING ANSWER")
 	print('Button: ', button, ', correct sound: ', correct_sound, ', button sound: ', button.get_node("Container/Sound").stream)
 	if correct_sound == button.get_node("Container/Sound").stream:
 		has_answered.emit(true)
-		print("You guessed the CORRECT color")
-		#update_points(10)
 		update_points.emit(10)
 		
-		#enabledd_buttons.emit(false)
 		enable_buttons(false)
 		await get_tree().create_timer(2).timeout
 		next_question(options_per_stage)

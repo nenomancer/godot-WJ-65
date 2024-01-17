@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c17wl400vqu7w"]
+
+[node name="Screen" type="CenterContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_group_ = true

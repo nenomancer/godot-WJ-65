@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://cc0bncck7kj42"]
 
-[ext_resource type="Script" path="res://game.gd" id="1_sy0m1"]
+[ext_resource type="Script" path="res://button_container.gd" id="1_dxpbg"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_j4v6p"]
 
 [node name="MainContainer" type="VBoxContainer"]
-script = ExtResource("1_sy0m1")
+script = ExtResource("1_dxpbg")
 
 [node name="TextContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
