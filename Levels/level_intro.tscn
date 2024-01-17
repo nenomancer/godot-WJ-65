@@ -47,7 +47,7 @@ script = ExtResource("3_e7knf")
 
 [node name="MainContainer" parent="Screen" instance=ExtResource("4_571iw")]
 layout_mode = 2
-options_per_stage = 5
+options_per_stage = 12
 
 [connection signal="play_correct_sound" from="Screen/MainContainer" to="MainSound" method="_on_main_container_play_correct_sound"]
 [connection signal="set_answer" from="Screen/MainContainer" to="MainSound" method="_on_main_container_set_answer"]

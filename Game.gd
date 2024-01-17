@@ -129,19 +129,15 @@ func set_correct_answer(button: MarginContainer):
 	$CorrectNote.text = "Correct note: " + button.get_node("Container/NoteName").text
 
 func check_existing_button(index) -> int:
-	print("checking index: ", index)
 	var note_name = sound_color_pairs.keys()
-	print(existing_buttons)
-	print(note_name[index])
+	index = index % note_name.size()
+	
 	if existing_buttons.has(note_name[index]):
-		print("THIS ALREADY EXISTS! ", note_name[index])
 		return check_existing_button(index + 1)
 	else:
-		print("THIS CAN BE APPENDED ", note_name[index])
 		existing_buttons.append(note_name[index])
-		print("returning index: ", index)
 	return index
-	#
+	
 func generate_buttons(number_of_buttons: int, first_time: bool = false):
 	var i = 0
 	if first_time:
