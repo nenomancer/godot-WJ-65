@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://cettirweceywv"]
+[gd_scene load_steps=10 format=3 uid="uid://cettirweceywv"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_3k8xh"]
+[ext_resource type="Script" path="res://main_sound.gd" id="2_8qosd"]
 
 [sub_resource type="Gradient" id="Gradient_66aks"]
 colors = PackedColorArray(0.650159, 0.300289, 0.632355, 1, 0.80538, 0.705082, 0.296175, 1)
@@ -93,6 +94,7 @@ size_flags_vertical = 3
 alignment = 1
 
 [node name="MainSound" type="AudioStreamPlayer" parent="Screen/MainContainer"]
+script = ExtResource("2_8qosd")
 
 [node name="CorrectNote" type="Label" parent="Screen/MainContainer"]
 layout_mode = 2

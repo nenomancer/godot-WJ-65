@@ -1,5 +1,13 @@
 extends Container
+
+signal set_answer(button: MarginContainer)
+signal has_answered(is_correct: bool)
+signal play_correct_sound
+signal enabledd_buttons(enabled: bool) # I think this needs buttons to be child
+signal update_poinz(point_amount: int)
+
 # Called when the node enters the scene tree for the first time.
+
 const BUTTON = preload("res://Button/button.tscn")
 const audio_data = preload("res://Assets/audio_data.gd")
 const color_data = preload("res://Assets/color_data.gd")
@@ -10,17 +18,13 @@ const result_text = {
 	incorrect = "That's the wrong answer",
 }
 
-signal has_answered(is_correct: bool)
 
-@onready var background_correct = $"../BackgroundCorrect"
-@onready var points_label = $"../Points"
 @export var stages: int = 5
 @export var options_per_stage = 3
 
 var points: int = 0
 var stage_index: int = 0
 
-#const colors = [green, jade, turquoise, baby_blue, blue, purple, pink, salmon]
 var colors: Array = color_data.DATA.duplicate(true)
 const sounds: Dictionary = audio_data.DATA
 
@@ -28,7 +32,6 @@ const sounds: Dictionary = audio_data.DATA
 var loaded_buttons: Array
 var generated_buttons: Array
 
-var index = 0
 var sound_color_pairs = {
 	# note: String,
 	# sound: AudioStreamWAV,
@@ -66,16 +69,16 @@ func generate_color_pairs(note_range: int = 3, semitone_skip: int = 4):
 
 func init_stage():
 	enable_buttons(false)
-	await get_tree().create_timer(2).timeout
-	$MainSound.playing = true
+	
+	await get_tree().create_timer(2).timeout # wait before initially playing the answer
+	play_correct_sound.emit() 
+	
 	await get_tree().create_timer(2).timeout
 	enable_buttons(true)
-
 
 func next_question(number_of_questions: int):
 	await get_tree().create_timer(2).timeout
 	
-	background_correct.visible = false
 	if stage_index < stages:
 		for child in $Colors.get_children():
 			$Colors.remove_child(child)
@@ -84,7 +87,7 @@ func next_question(number_of_questions: int):
 		init_stage()
 	else:
 		print("NO MORE STAGES WTF")
-	
+
 func enable_buttons(enable: bool = true):
 	for child in $Colors.get_children():
 		if enable:
@@ -93,18 +96,11 @@ func enable_buttons(enable: bool = true):
 			child.get_node("Container/Button").disabled = true
 
 func update_points(point_amount: int = 0):
-	points += point_amount
-	points_label.text = "Points: " + str(points)
+	update_poinz.emit(point_amount)
 	
 	# MAYBE ADD SOUND EFFECTS FOR EVERYTHING
 	# material.set_shader_parameter("some_value", some_value)
 	# material.set_shader_parameter("colors", [Vector3(1, 0, 0), Vector3(0, 1, 0), Vector3(0, 0, 1)])
-
-func set_correct_answer(button: MarginContainer):
-	correct_color = button.get_node("Container/Color").color
-	correct_sound = button.get_node("Container/Sound").stream
-	$CorrectNote.text = "Correct note: " + button.get_node("Container/NoteName").text
-	$MainSound.stream = correct_sound
 
 func load_buttons():
 	correct_index = randi_range(0, loaded_buttons.size() - 1)
@@ -112,7 +108,7 @@ func load_buttons():
 	for button in loaded_buttons:
 		var target_sound = button.get_node("Container/Sound").stream
 		button.color_clicked.connect(Callable(check_answer.bind(button)))
-		button.get_node("Container/Button").disabled = true
+		#button.get_node("Container/Button").disabled = true
 		for key in sound_color_pairs:
 			var audition_sound = sound_color_pairs[key].sound
 			if(audition_sound == target_sound):
@@ -125,6 +121,12 @@ func load_buttons():
 				
 		if correct_index == button.get_index():
 			set_correct_answer(button)
+
+func set_correct_answer(button: MarginContainer):
+	set_answer.emit(button)
+	correct_color = button.get_node("Container/Color").color
+	correct_sound = button.get_node("Container/Sound").stream
+	$CorrectNote.text = "Correct note: " + button.get_node("Container/NoteName").text
 
 func generate_buttons(number_of_buttons: int, first_time: bool = false):
 	var i = 0
@@ -144,10 +146,9 @@ func generate_buttons(number_of_buttons: int, first_time: bool = false):
 		
 		new_button.color_value = new_color
 		new_button.color_hover = new_color.lightened(0.5)
+		
 		new_button.color_clicked.connect(Callable(check_answer).bind(new_button))
 		new_button.configure_button(new_sound, new_color, new_label)
-		new_button.get_node("Container/Button").disabled = true
-		print(new_button.get_node("Container/Button"))
 		
 		if correct_index == i: 
 			set_correct_answer(new_button)
@@ -155,27 +156,25 @@ func generate_buttons(number_of_buttons: int, first_time: bool = false):
 		$Colors.add_child(new_button)
 		i += 1
 
-func change_bg_color(color: Color):
-	$'../'Background.
 func check_answer(button):
+	print("CHECKING ANSWER")
 	print('Button: ', button, ', correct sound: ', correct_sound, ', button sound: ', button.get_node("Container/Sound").stream)
 	if correct_sound == button.get_node("Container/Sound").stream:
+		has_answered.emit(true)
 		print("You guessed the CORRECT color")
-		background_correct.visible = true
 		update_points(10)
+		#enabledd_buttons.emit(false)
 		enable_buttons(false)
 		await get_tree().create_timer(2).timeout
-		background_correct.visible = false
 		next_question(options_per_stage)
 	else:
 		print("You guessed the WRONG color")
-		background_correct.visible = false
+		has_answered.emit(false)
 		update_points(-5)
 		enable_buttons(false)
+		#enabledd_buttons.emit(false)
 		await get_tree().create_timer(2).timeout
-		background_correct.visible = false
 		next_question(options_per_stage)
-	
 
 func mix_color(colors: Array[Color]) -> Color:
 	# Mix two or more Colors
@@ -185,3 +184,9 @@ func mix_color(colors: Array[Color]) -> Color:
 	for color in colors:
 		color_sum += color
 	return color_sum / colors.size()
+#
+#
+#func _on_button_color_clicked(button):
+	##pass # Replace with function body.
+	#print("ITS CLICKED WTF")
+	#check_answer(button)

@@ -15,8 +15,8 @@ func _physics_process(delta):
 	#pass
 	background.material.set_shader_parameter("noise_offset", get_global_mouse_position())
 	background.material.set_shader_parameter("scroll_speed", get_global_mouse_position().y * 0.005)
-	print('mouse position: ', get_global_mouse_position())	
-	print('shader offset: ', background.material.get_shader_parameter("noise_offset"))
+	#print('mouse position: ', get_global_mouse_position())	
+	#print('shader offset: ', background.material.get_shader_parameter("noise_offset"))
 	
 #func game_intro():
 	#label.text = "This is the intro text"

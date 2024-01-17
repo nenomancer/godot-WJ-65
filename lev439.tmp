@@ -1,0 +1,102 @@
+[gd_scene load_steps=13 format=3 uid="uid://jxe7ma7blxvd"]
+
+[ext_resource type="Script" path="res://game.gd" id="1_apjcn"]
+[ext_resource type="Script" path="res://background.gd" id="1_dsq38"]
+[ext_resource type="PackedScene" uid="uid://m5oka3dxiq0j" path="res://Button/button.tscn" id="2_toots"]
+[ext_resource type="AudioStream" uid="uid://ckjfgtaer5ak2" path="res://Assets/piano/grand_piano_c.wav" id="3_7na06"]
+[ext_resource type="AudioStream" uid="uid://doo8rgpt37yif" path="res://Assets/piano/grand_piano_e.wav" id="4_prmr3"]
+[ext_resource type="AudioStream" uid="uid://ugjdf1urcdo2" path="res://Assets/piano/grand_piano_g.wav" id="5_lmlkq"]
+
+[sub_resource type="Gradient" id="Gradient_xvx8v"]
+colors = PackedColorArray(0.650159, 0.300289, 0.632355, 1, 0.80538, 0.705082, 0.296175, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_lkut6"]
+frequency = 0.0001
+offset = Vector3(0, -48.39, 0)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vec2i"]
+width = 800
+height = 800
+color_ramp = SubResource("Gradient_xvx8v")
+noise = SubResource("FastNoiseLite_lkut6")
+
+[sub_resource type="Gradient" id="Gradient_7dj61"]
+colors = PackedColorArray(0, 0.554358, 0.210696, 1, 0.663105, 0.76588, 0.102753, 1)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5h0y0"]
+width = 800
+height = 800
+color_ramp = SubResource("Gradient_7dj61")
+noise = SubResource("FastNoiseLite_lkut6")
+
+[sub_resource type="LabelSettings" id="LabelSettings_j4v6p"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Screen" type="CenterContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Background" type="TextureRect" parent="Screen"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_vec2i")
+script = ExtResource("1_dsq38")
+
+[node name="BackgroundCorrect" type="TextureRect" parent="Screen"]
+visible = false
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_5h0y0")
+
+[node name="Points" type="Label" parent="Screen"]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+text = "Points: "
+
+[node name="MainContainer" type="VBoxContainer" parent="Screen"]
+layout_mode = 2
+script = ExtResource("1_apjcn")
+stages = null
+options_per_stage = null
+
+[node name="TextContainer" type="VBoxContainer" parent="Screen/MainContainer"]
+layout_mode = 2
+
+[node name="IntroText1" type="Label" parent="Screen/MainContainer/TextContainer"]
+layout_mode = 2
+text = "These are the colors and their notes.
+Click on them to hear the sound"
+label_settings = SubResource("LabelSettings_j4v6p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Colors" type="HBoxContainer" parent="Screen/MainContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button" parent="Screen/MainContainer/Colors" instance=ExtResource("2_toots")]
+layout_mode = 2
+current_sound = ExtResource("3_7na06")
+
+[node name="Button2" parent="Screen/MainContainer/Colors" instance=ExtResource("2_toots")]
+layout_mode = 2
+current_sound = ExtResource("4_prmr3")
+
+[node name="Button3" parent="Screen/MainContainer/Colors" instance=ExtResource("2_toots")]
+layout_mode = 2
+current_sound = ExtResource("5_lmlkq")
+
+[node name="MainSound" type="AudioStreamPlayer" parent="Screen/MainContainer"]
+
+[node name="CorrectNote" type="Label" parent="Screen/MainContainer"]
+layout_mode = 2
+text = "Correct Note: C#"
+label_settings = SubResource("LabelSettings_j4v6p")
+horizontal_alignment = 1
+vertical_alignment = 1

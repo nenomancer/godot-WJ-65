@@ -1,5 +1,6 @@
 extends MarginContainer
-signal color_clicked(button)
+signal color_clicked(button: MarginContainer)
+signal button_enabled(enabled: bool)
 
 @onready var button = $Container/Color.color
 @onready var button_sound = $Container/Sound
@@ -18,13 +19,6 @@ func _ready():
 		#button_color.color = current_color
 	if current_sound != null:
 		button_sound.stream = current_sound
-		#
-	
-	#print(current_sound.get_length() / 2)
-	#await get_tree().create_timer(2).timeout
-	#$Container/Color.color = Color.ANTIQUE_WHITE
-	#color_value = button_color.color
-	#color_hover = color_value.lightened(0.25)
 
 func configure_button(audio: AudioStreamWAV, fill_color: Color, text: String):
 	$Container/Sound.stream = audio
@@ -49,3 +43,12 @@ func _on_button_mouse_entered():
 func _on_button_mouse_exited():
 	var tween = get_tree().create_tween()
 	tween.tween_property($Container/Color, "color", button_color, 0.25)
+
+
+func _on_main_container_enabledd_buttons(enabled):
+	if enabled:
+		print("ITS ENABLIN!")
+		enabled = true
+	else:
+		enabled = false
+		print("DISABLIIIIN!")	
