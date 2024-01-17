@@ -3,8 +3,7 @@ extends Container
 signal set_answer(button: MarginContainer)
 signal has_answered(is_correct: bool)
 signal play_correct_sound
-signal enabledd_buttons(enabled: bool) # I think this needs buttons to be child
-signal update_poinz(point_amount: int)
+signal update_points(point_amount: int)
 
 # Called when the node enters the scene tree for the first time.
 
@@ -24,6 +23,7 @@ const result_text = {
 
 var points: int = 0
 var stage_index: int = 0
+var existing_buttons: Array
 
 var colors: Array = color_data.DATA.duplicate(true)
 const sounds: Dictionary = audio_data.DATA
@@ -45,7 +45,7 @@ var correct_sound: AudioStreamWAV
 func _ready():
 	generate_color_pairs(12, 1)
 	print(sound_color_pairs.keys())
-	update_points()
+	update_points.emit(0)
 	
 	loaded_buttons = $Colors.get_children()
 	if loaded_buttons.size() > 0:
@@ -94,9 +94,9 @@ func enable_buttons(enable: bool = true):
 			child.get_node("Container/Button").disabled = false
 		else:
 			child.get_node("Container/Button").disabled = true
-
-func update_points(point_amount: int = 0):
-	update_poinz.emit(point_amount)
+#
+#func update_points(point_amount: int = 0):
+	#update_points.emit(point_amount)
 	
 	# MAYBE ADD SOUND EFFECTS FOR EVERYTHING
 	# material.set_shader_parameter("some_value", some_value)
@@ -128,6 +128,20 @@ func set_correct_answer(button: MarginContainer):
 	correct_sound = button.get_node("Container/Sound").stream
 	$CorrectNote.text = "Correct note: " + button.get_node("Container/NoteName").text
 
+func check_existing_button(index) -> int:
+	print("checking index: ", index)
+	var note_name = sound_color_pairs.keys()
+	print(existing_buttons)
+	print(note_name[index])
+	if existing_buttons.has(note_name[index]):
+		print("THIS ALREADY EXISTS! ", note_name[index])
+		return check_existing_button(index + 1)
+	else:
+		print("THIS CAN BE APPENDED ", note_name[index])
+		existing_buttons.append(note_name[index])
+		print("returning index: ", index)
+	return index
+	#
 func generate_buttons(number_of_buttons: int, first_time: bool = false):
 	var i = 0
 	if first_time:
@@ -135,14 +149,22 @@ func generate_buttons(number_of_buttons: int, first_time: bool = false):
 	correct_index = randi_range(0, number_of_buttons - 1)
 	print("CORRECT INDEX: ", correct_index)
 	
+	var somethin: Array
 	while i < number_of_buttons:
-		var indexx = randi_range(0, sound_color_pairs.values().size() - 1)
+		#var indexx = randi_range(0, sound_color_pairs.values().size() - 1)
+		var indexx = check_existing_button(randi_range(0, sound_color_pairs.values().size() - 1))
+		print('indexx!!: ', indexx)
+		
+		var button_data = sound_color_pairs.values()[indexx]
+		#if somethin.has(button_data):
+			#print("THIS ALREADY EXISTS! ", button_data)
+		#somethin.append(button_data)
 		
 		var new_button = BUTTON.instantiate()
 		
-		var new_color: Color = sound_color_pairs.values()[indexx].color
-		var new_sound: AudioStreamWAV = sound_color_pairs.values()[indexx].sound
-		var new_label: String = sound_color_pairs.values()[indexx].note
+		var new_color: Color = button_data.color
+		var new_sound: AudioStreamWAV = button_data.sound
+		var new_label: String = button_data.note
 		
 		new_button.color_value = new_color
 		new_button.color_hover = new_color.lightened(0.5)
@@ -162,7 +184,9 @@ func check_answer(button):
 	if correct_sound == button.get_node("Container/Sound").stream:
 		has_answered.emit(true)
 		print("You guessed the CORRECT color")
-		update_points(10)
+		#update_points(10)
+		update_points.emit(10)
+		
 		#enabledd_buttons.emit(false)
 		enable_buttons(false)
 		await get_tree().create_timer(2).timeout
@@ -170,7 +194,9 @@ func check_answer(button):
 	else:
 		print("You guessed the WRONG color")
 		has_answered.emit(false)
-		update_points(-5)
+		#update_points(-5)
+		update_points.emit(-5)
+		
 		enable_buttons(false)
 		#enabledd_buttons.emit(false)
 		await get_tree().create_timer(2).timeout

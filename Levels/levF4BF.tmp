@@ -1,0 +1,49 @@
+[gd_scene load_steps=8 format=3 uid="uid://jxe7ma7blxvd"]
+
+[ext_resource type="PackedScene" uid="uid://c2lkmxl2mcmc0" path="res://main_sound.tscn" id="1_hjbfp"]
+[ext_resource type="Script" path="res://background.gd" id="2_p2to6"]
+[ext_resource type="Script" path="res://points.gd" id="3_e7knf"]
+[ext_resource type="PackedScene" uid="uid://cc0bncck7kj42" path="res://main_container.tscn" id="4_571iw"]
+
+[sub_resource type="Gradient" id="Gradient_xvx8v"]
+colors = PackedColorArray(0.650159, 0.300289, 0.632355, 1, 0.80538, 0.705082, 0.296175, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_lkut6"]
+frequency = 0.0001
+offset = Vector3(0, -48.39, 0)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vec2i"]
+width = 800
+height = 800
+color_ramp = SubResource("Gradient_xvx8v")
+noise = SubResource("FastNoiseLite_lkut6")
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainSound" parent="." instance=ExtResource("1_hjbfp")]
+
+[node name="Screen" type="CenterContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_group_ = true
+
+[node name="Background" type="TextureRect" parent="Screen"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_vec2i")
+script = ExtResource("2_p2to6")
+
+[node name="Points" type="Label" parent="Screen"]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+text = "Points: "
+script = ExtResource("3_e7knf")
+
+[node name="MainContainer" parent="Screen" instance=ExtResource("4_571iw")]
+layout_mode = 2

@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://cc0bncck7kj42"]
+
+[ext_resource type="Script" path="res://game.gd" id="1_sy0m1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_j4v6p"]
+
+[node name="MainContainer" type="VBoxContainer"]
+script = ExtResource("1_sy0m1")
+
+[node name="TextContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="IntroText1" type="Label" parent="TextContainer"]
+layout_mode = 2
+text = "These are the colors and their notes.
+Click on them to hear the sound"
+label_settings = SubResource("LabelSettings_j4v6p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Colors" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CorrectNote" type="Label" parent="."]
+layout_mode = 2
+text = "Correct Note: C#"
+label_settings = SubResource("LabelSettings_j4v6p")
+horizontal_alignment = 1
+vertical_alignment = 1
