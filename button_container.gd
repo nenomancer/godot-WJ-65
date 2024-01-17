@@ -142,20 +142,18 @@ func generate_buttons(number_of_buttons: int, first_time: bool = false):
 	var i = 0
 	if first_time:
 		sound_color_pairs.values().shuffle()
+	var new_correct_index = randi_range(0, number_of_buttons - 1)
+	if (new_correct_index != correct_index):
+		correct_index = new_correct_index
+	
 	correct_index = randi_range(0, number_of_buttons - 1)
 	print("CORRECT INDEX: ", correct_index)
 	
 	var somethin: Array
 	while i < number_of_buttons:
-		#var indexx = randi_range(0, sound_color_pairs.values().size() - 1)
-		var indexx = check_existing_button(randi_range(0, sound_color_pairs.values().size() - 1))
-		print('indexx!!: ', indexx)
-		
-		var button_data = sound_color_pairs.values()[indexx]
-		#if somethin.has(button_data):
-			#print("THIS ALREADY EXISTS! ", button_data)
-		#somethin.append(button_data)
-		
+		var index = check_existing_button(randi_range(0, sound_color_pairs.values().size() - 1))
+		var button_data = sound_color_pairs.values()[index]
+
 		var new_button = BUTTON.instantiate()
 		
 		var new_color: Color = button_data.color
@@ -204,9 +202,3 @@ func mix_color(colors: Array[Color]) -> Color:
 	for color in colors:
 		color_sum += color
 	return color_sum / colors.size()
-#
-#
-#func _on_button_color_clicked(button):
-	##pass # Replace with function body.
-	#print("ITS CLICKED WTF")
-	#check_answer(button)

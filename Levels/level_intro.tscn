@@ -1,10 +1,23 @@
-[gd_scene load_steps=9 format=3 uid="uid://jxe7ma7blxvd"]
+[gd_scene load_steps=11 format=3 uid="uid://jxe7ma7blxvd"]
 
 [ext_resource type="PackedScene" uid="uid://c2lkmxl2mcmc0" path="res://main_sound.tscn" id="1_hjbfp"]
 [ext_resource type="PackedScene" uid="uid://c17wl400vqu7w" path="res://screen.tscn" id="2_vgo66"]
+[ext_resource type="Shader" path="res://Levels/background.gdshader" id="3_lrj6y"]
 [ext_resource type="Script" path="res://background.gd" id="3_vo5in"]
 [ext_resource type="Script" path="res://points.gd" id="4_6tk1p"]
 [ext_resource type="PackedScene" uid="uid://cc0bncck7kj42" path="res://button_container.tscn" id="5_iapkn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pvf3j"]
+shader = ExtResource("3_lrj6y")
+shader_parameter/noise_offset = null
+shader_parameter/line_thickness = 0.01
+shader_parameter/grid_offset_x = 0.5
+shader_parameter/grid_offset_y = 0.5
+shader_parameter/grid_divisions_x = 2
+shader_parameter/grid_divisions_y = 15
+shader_parameter/is_moving = false
+shader_parameter/scroll_speed_x = -0.05
+shader_parameter/scroll_speed_y = 0.0
 
 [sub_resource type="Gradient" id="Gradient_xvx8v"]
 colors = PackedColorArray(0.650159, 0.300289, 0.632355, 1, 0.80538, 0.705082, 0.296175, 1)
@@ -33,6 +46,7 @@ grow_vertical = 2
 layout_mode = 0
 
 [node name="Background" type="TextureRect" parent="Screen"]
+material = SubResource("ShaderMaterial_pvf3j")
 layout_mode = 2
 texture = SubResource("NoiseTexture2D_hdhgt")
 script = ExtResource("3_vo5in")
