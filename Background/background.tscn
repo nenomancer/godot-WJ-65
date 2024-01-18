@@ -1,0 +1,45 @@
+[gd_scene load_steps=10 format=3 uid="uid://beg2uunjdjn4m"]
+
+[ext_resource type="Shader" path="res://Levels/background.gdshader" id="1_k7fu3"]
+[ext_resource type="Script" path="res://Background/background.gd" id="2_2juca"]
+
+[sub_resource type="Gradient" id="Gradient_wuysc"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dgh4c"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_en8ic"]
+seamless = true
+color_ramp = SubResource("Gradient_wuysc")
+noise = SubResource("FastNoiseLite_dgh4c")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pvf3j"]
+resource_local_to_scene = true
+shader = ExtResource("1_k7fu3")
+shader_parameter/noise_offset = null
+shader_parameter/line_thickness = 0.01
+shader_parameter/grid_offset_x = 0.5
+shader_parameter/grid_offset_y = 0.5
+shader_parameter/grid_divisions_x = 0
+shader_parameter/grid_divisions_y = 15
+shader_parameter/is_moving = false
+shader_parameter/scroll_speed_x = 0.0
+shader_parameter/scroll_speed_y = 0.05
+shader_parameter/dist_noise = SubResource("NoiseTexture2D_en8ic")
+
+[sub_resource type="Gradient" id="Gradient_xvx8v"]
+colors = PackedColorArray(0.650159, 0.300289, 0.632355, 1, 0.80538, 0.705082, 0.296175, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_lkut6"]
+frequency = 0.0001
+offset = Vector3(0, -48.39, 0)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hdhgt"]
+width = 800
+height = 800
+color_ramp = SubResource("Gradient_xvx8v")
+noise = SubResource("FastNoiseLite_lkut6")
+
+[node name="Background" type="TextureRect"]
+material = SubResource("ShaderMaterial_pvf3j")
+texture = SubResource("NoiseTexture2D_hdhgt")
+script = ExtResource("2_2juca")

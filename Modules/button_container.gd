@@ -19,7 +19,7 @@ const result_text = {
 
 
 @export var stages: int = 5
-@export var options_per_stage = 3
+@export_range(0, 12) var options_per_stage:int = 3
 
 var points: int = 0
 var stage_index: int = 0
@@ -70,10 +70,10 @@ func generate_color_pairs(note_range: int = 3, semitone_skip: int = 4):
 func init_stage():
 	enable_buttons(false)
 	
-	await get_tree().create_timer(2).timeout # wait before initially playing the answer
-	play_correct_sound.emit() 
+	await get_tree().create_timer(1).timeout # wait before initially playing the answer
+	play_correct_sound.emit()
 	
-	await get_tree().create_timer(2).timeout
+	await get_tree().create_timer(2).timeout # wait after playing the answer
 	enable_buttons(true)
 
 func next_question(number_of_questions: int):
@@ -91,7 +91,8 @@ func next_question(number_of_questions: int):
 func enable_buttons(enable: bool = true):
 	for child in $Colors.get_children():
 		if enable:
-			child.get_node("Container/Button").disabled = false
+			await get_tree().create_timer(child.get_index() / 50.0).timeout
+			child.set_state(child.states.is_flipping)
 		else:
 			child.get_node("Container/Button").disabled = true
 #
@@ -163,6 +164,7 @@ func generate_buttons(number_of_buttons: int, first_time: bool = false):
 		new_button.color_value = new_color
 		new_button.color_hover = new_color.lightened(0.5)
 		
+		new_button.state = new_button.states.is_hidden
 		new_button.color_clicked.connect(Callable(check_answer).bind(new_button))
 		new_button.configure_button(new_sound, new_color, new_label)
 		
@@ -175,16 +177,29 @@ func generate_buttons(number_of_buttons: int, first_time: bool = false):
 
 func check_answer(button):
 	print("CHECKING ANSWER")
-	print('Button: ', button, ', correct sound: ', correct_sound, ', button sound: ', button.get_node("Container/Sound").stream)
+	print('Button: ', button.get_index(), ', correct sound: ', correct_sound, ', button sound: ', button.get_node("Container/Sound").stream)
 	if correct_sound == button.get_node("Container/Sound").stream:
 		has_answered.emit(true)
 		update_points.emit(10)
-		
+		for child in $Colors.get_children():
+			if button != child:
+				child.get_node("Container/Color").color = Color.RED
+			else:
+				child.get_node("Container/Color").color = Color.GREEN
+
 		enable_buttons(false)
 		await get_tree().create_timer(2).timeout
 		next_question(options_per_stage)
 	else:
 		print("You guessed the WRONG color")
+		
+		for i in $Colors.get_children().size():
+			if correct_sound == $Colors.get_children()[i].get_node("Container/Sound").stream:
+				$Colors.get_children()[i].get_node("Container/Color").color = Color.YELLOW
+			else:
+				$Colors.get_children()[i].get_node("Container/Color").color = Color.GRAY
+		button.get_node("Container/Color").color = Color.RED
+		
 		has_answered.emit(false)
 		#update_points(-5)
 		update_points.emit(-5)

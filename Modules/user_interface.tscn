@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://dxabphe583t1w"]
 
-[ext_resource type="Script" path="res://user_interface.gd" id="1_8ynky"]
+[ext_resource type="Script" path="res://Modules/user_interface.gd" id="1_8ynky"]
 [ext_resource type="Shader" path="res://bg_noise.gdshader" id="2_6eibw"]
 [ext_resource type="Texture2D" uid="uid://da4hbvcigs587" path="res://icon.svg" id="3_nas2d"]
 

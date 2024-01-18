@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://cc0bncck7kj42"]
+
+[ext_resource type="Script" path="res://button_container.gd" id="1_dxpbg"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_j4v6p"]
+
+[node name="ButtonContainer" type="VBoxContainer"]
+script = ExtResource("1_dxpbg")
+
+[node name="Colors" type="GridContainer" parent="."]
+layout_direction = 2
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 4
+
+[node name="CorrectNote" type="Label" parent="."]
+layout_mode = 2
+text = "Correct Note: C#"
+label_settings = SubResource("LabelSettings_j4v6p")
+horizontal_alignment = 1
+vertical_alignment = 1

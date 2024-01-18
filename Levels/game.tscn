@@ -1,0 +1,144 @@
+[gd_scene load_steps=11 format=3 uid="uid://jxe7ma7blxvd"]
+
+[ext_resource type="PackedScene" uid="uid://c2lkmxl2mcmc0" path="res://Modules/main_sound.tscn" id="1_2duaq"]
+[ext_resource type="PackedScene" uid="uid://c17wl400vqu7w" path="res://Modules/screen.tscn" id="2_fj1to"]
+[ext_resource type="PackedScene" uid="uid://beg2uunjdjn4m" path="res://Background/background.tscn" id="3_e3v06"]
+[ext_resource type="Script" path="res://Modules/points.gd" id="4_db8tn"]
+[ext_resource type="PackedScene" uid="uid://cc0bncck7kj42" path="res://Modules/button_container.tscn" id="5_4gtp5"]
+
+[sub_resource type="Shader" id="Shader_rf03k"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+uniform vec2 noise_offset;
+
+
+
+group_uniforms grid_setup;
+uniform float line_thickness:hint_range(0.00, 1.00, 0.01) = 0.01;
+uniform float grid_offset_x:hint_range(0.00, 1.00, 0.01);
+uniform float grid_offset_y:hint_range(0.00, 1.00, 0.01);
+uniform int grid_divisions_x:hint_range(0, 16, 0.1);
+uniform int grid_divisions_y:hint_range(0, 16, 0.1);
+
+group_uniforms grid_distortion;
+uniform sampler2D dist_noise;
+
+
+group_uniforms grid_animation;
+uniform bool is_moving = false;
+uniform float scroll_speed_x:hint_range(-0.5, 0.5, 0.01) = 0.00;
+uniform float scroll_speed_y:hint_range(-0.5, 0.5, 0.01) = 0.00;
+
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	// Called for every pixel the material is visible on.
+	vec2 center = vec2(.5, .5);
+	vec4 viewer;
+	float _i = 1.0;
+	float _radius = mod(TIME * 0.2, 1);
+	float _distance = distance(center, UV);
+	float _distance_2 = distance(center, UV) / 2.0;
+	vec4 color_2_place;
+	vec4 color_1_place;
+	float wavy = 1.0;
+	if (is_moving) {
+		wavy = (sin(TIME) / 2.0 + .5);
+	}
+	//wavy = 0.0;
+	vec2 new_uv = vec2(UV.r - grid_offset_x + (scroll_speed_x * TIME) + line_thickness / 2.0, 
+					UV.g + grid_offset_y + (scroll_speed_y * TIME) + line_thickness / 2.0);
+	vec4 grid_uv = vec4(mod(new_uv.x, 1.0 / float(grid_divisions_x)), mod(new_uv.y, 1.0 / float(grid_divisions_y)), 1.0, 1.0);
+	vec4 grid_x_2 = vec4(grid_uv.g);
+	vec4 grid_y_2 = vec4(grid_uv.r);
+	vec4 grid = min(grid_x_2, grid_y_2);
+	
+	float circle_uv_x = pow(UV.r, 2.0);
+	float circle_uv_y = pow(UV.g, 2.0);
+	vec2 offset_uv = vec2(UV.r + 0.5, UV.g +0.5);
+	
+	
+	
+	//offset_uv = pow(offset_uv, vec2(2.0));
+	float xx = offset_uv.x - 1.0;
+	xx = abs(xx);
+	
+	
+	//COLOR = max(grid_x, grid_y);
+	viewer = step(grid_x_2, grid_y_2); // interesno, ali nebitno za sega
+	viewer = step(grid, vec4(line_thickness * wavy)) * vec4(1.0, 0.5, 0.0, 1.0);
+	viewer = smoothstep(grid, vec4(line_thickness * wavy), vec4(0.02)) * vec4(UV, 0.0, 1.0);
+	viewer = vec4(0.4, 0.2, 0.6, 1.0) + step(grid, vec4(line_thickness)) * vec4(0.0, 1.0, 0.0, 1.0);
+	
+	
+
+	COLOR = viewer;
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="Gradient" id="Gradient_wuysc"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dgh4c"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_en8ic"]
+seamless = true
+color_ramp = SubResource("Gradient_wuysc")
+noise = SubResource("FastNoiseLite_dgh4c")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e5855"]
+resource_local_to_scene = true
+shader = SubResource("Shader_rf03k")
+shader_parameter/noise_offset = null
+shader_parameter/line_thickness = 0.01
+shader_parameter/grid_offset_x = 0.5
+shader_parameter/grid_offset_y = 0.5
+shader_parameter/grid_divisions_x = 0
+shader_parameter/grid_divisions_y = 15
+shader_parameter/is_moving = false
+shader_parameter/scroll_speed_x = 0.0
+shader_parameter/scroll_speed_y = 0.05
+shader_parameter/dist_noise = SubResource("NoiseTexture2D_en8ic")
+
+[node name="Game" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainSound" parent="." instance=ExtResource("1_2duaq")]
+
+[node name="Screen" parent="." instance=ExtResource("2_fj1to")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="Background" parent="Screen" instance=ExtResource("3_e3v06")]
+material = SubResource("ShaderMaterial_e5855")
+layout_mode = 2
+
+[node name="Points" type="Label" parent="Screen"]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+text = "Points: "
+script = ExtResource("4_db8tn")
+
+[node name="ButtonContainer" parent="Screen" instance=ExtResource("5_4gtp5")]
+layout_mode = 2
+options_per_stage = 12
+
+[connection signal="play_correct_sound" from="Screen/ButtonContainer" to="MainSound" method="_on_button_container_play_correct_sound"]
+[connection signal="set_answer" from="Screen/ButtonContainer" to="MainSound" method="_on_button_container_set_answer"]
+[connection signal="update_points" from="Screen/ButtonContainer" to="Screen/Points" method="_on_button_container_update_points"]

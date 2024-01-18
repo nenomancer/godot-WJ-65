@@ -76,6 +76,8 @@ offset_right = 120.0
 offset_bottom = 120.0
 pivot_offset = Vector2(60, 60)
 script = ExtResource("1_37jjs")
+FLIP_TIME = null
+current_color = null
 metadata/_edit_group_ = true
 
 [node name="Container" type="Panel" parent="."]

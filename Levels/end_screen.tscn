@@ -1,4 +1,11 @@
-shader_type canvas_item;
+[gd_scene load_steps=8 format=3 uid="uid://djtc8n164uo1p"]
+
+[ext_resource type="PackedScene" uid="uid://c17wl400vqu7w" path="res://Modules/screen.tscn" id="1_vgq04"]
+[ext_resource type="PackedScene" uid="uid://beg2uunjdjn4m" path="res://Background/background.tscn" id="2_nf7ll"]
+
+[sub_resource type="Shader" id="Shader_j36y0"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
 uniform vec2 noise_offset;
 
 
@@ -72,3 +79,47 @@ void fragment() {
 	// Called for every pixel for every light affecting the CanvasItem.
 	// Uncomment to replace the default light processing function with this one.
 //}
+"
+
+[sub_resource type="Gradient" id="Gradient_wuysc"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dgh4c"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_en8ic"]
+seamless = true
+color_ramp = SubResource("Gradient_wuysc")
+noise = SubResource("FastNoiseLite_dgh4c")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6asqv"]
+resource_local_to_scene = true
+shader = SubResource("Shader_j36y0")
+shader_parameter/noise_offset = null
+shader_parameter/line_thickness = 0.01
+shader_parameter/grid_offset_x = 0.5
+shader_parameter/grid_offset_y = 0.5
+shader_parameter/grid_divisions_x = 11
+shader_parameter/grid_divisions_y = 15
+shader_parameter/is_moving = false
+shader_parameter/scroll_speed_x = 0.0
+shader_parameter/scroll_speed_y = 0.05
+shader_parameter/dist_noise = SubResource("NoiseTexture2D_en8ic")
+
+[node name="EndScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Screen" parent="." instance=ExtResource("1_vgq04")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="Background" parent="Screen" instance=ExtResource("2_nf7ll")]
+material = SubResource("ShaderMaterial_6asqv")
+layout_mode = 2
